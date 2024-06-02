@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  play_app_podcasting_api:
+    container_name: play_app_podcasting_api
+    build:
+      context: .
+      target: production
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - .:/app
+    ports:
+      - 8080:8080
+    stdin_open: true
+    env_file:
+      - .env
