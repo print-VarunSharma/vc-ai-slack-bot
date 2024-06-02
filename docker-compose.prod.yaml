@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  play_app_podcasting_api:
-    container_name: play_app_podcasting_api
+  vc_slack_bot:
+    container_name: vc_slack_bot
     build:
       context: .
       target: production
