@@ -7,7 +7,14 @@ import { BaseMessage } from "@langchain/core/messages";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { createRetrievalChain } from "langchain/chains/retrieval";
-import { selfQueryRetriever } from "./localVectorStore";
+import { selfQueryRetriever } from "./localVectorStore.js";
+import dotenv from "dotenv";
+import {
+  VC_SYSTEM_PROMPT_V1,
+  VC_SYSTEM_PROMPT_V2,
+} from "./utils/constants/systemPrompt.constants.js";
+dotenv.config();
+// https://deadmanabir.hashnode.dev/building-a-chatbot-with-chat-history-using-langchain-jsts-a-step-by-step-guide
 
 // TODO: Update Retrieiver with real prod vector DB eventually.
 // For a MVP/POC - a local vector store is fine.
@@ -37,17 +44,8 @@ const historyAwareRetriever = await createHistoryAwareRetriever({
   rephrasePrompt: contextualizeQPrompt,
 });
 
-// Answer question
-const qaSystemPrompt = `
-You are an assistant for question-answering tasks. Use
-the following pieces of retrieved context to answer the
-question. If you don't know the answer, just say that you
-don't know. Use three sentences maximum and keep the answer
-concise.
-\n\n
-{context}`;
 const qaPrompt = ChatPromptTemplate.fromMessages([
-  ["system", qaSystemPrompt],
+  ["system", VC_SYSTEM_PROMPT_V2],
   new MessagesPlaceholder("chat_history"),
   ["human", "{input}"],
 ]);
@@ -68,7 +66,7 @@ const ragChain = await createRetrievalChain({
 // Usage:
 const chat_history: BaseMessage[] = [];
 
-export async function chatWithGeminiWithGrounding(
+export async function chatWithGeminiWithLocalGrounding(
   humanInput: string
 ): Promise<string> {
   try {
@@ -82,7 +80,7 @@ export async function chatWithGeminiWithGrounding(
   }
 }
 
-const questionInput =
-  "Which movie was it that a bunch of scientists bring back dinosaurs?";
-
-chatWithGeminiWithGrounding(questionInput);
+//? Test Example:
+// const questionInput = "what is necto financials articles of incorporation?";
+// const answer = await chatWithGeminiWithLocalGrounding(questionInput);
+// console.log(answer);

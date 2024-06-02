@@ -1,9 +1,19 @@
 {
   "name": "virtual_counsel_slack_bot",
-  "module": "index.ts",
+  "module": "dist/app.jss",
   "type": "module",
+  "scripts": {
+    "blitz": "npm run build && npm run start",
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "ts-start": "node ./src/app.ts",
+    "build": "tsc --build",
+    "ts-dev": "tsc --watch"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "nodemon": "^3.1.2",
+    "ts-node": "^10.9.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -12,6 +22,7 @@
     "@langchain/core": "^0.2.5",
     "@langchain/google-genai": "^0.0.16",
     "@slack/bolt": "^3.18.0",
+    "dotenv": "^16.4.5",
     "langchain": "^0.2.4",
     "peggy": "^4.0.2"
   }
