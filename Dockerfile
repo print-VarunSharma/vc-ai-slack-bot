@@ -1,9 +1,12 @@
 
 # Use the official lightweight Node.js 12 image.
 # https://hub.docker.com/_/node
-FROM node:v21.7.1-slim as production
+FROM node:21.7.1-slim as production
 
-LABEL maintainer="varun.sharma@ad-auris.com"
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
@@ -16,7 +19,7 @@ COPY package*.json ./
 COPY tsconfig.json ./
 COPY ./src ./src
 
-RUN pnpm i
+RUN pnpm install
 RUN pnpm run build
 
 # Environment Variables
